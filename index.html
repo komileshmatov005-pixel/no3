@@ -84,6 +84,7 @@
         .btn {
             display: block; width: 85%; margin: 12px auto; padding: 18px;
             border-radius: 35px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: 0.3s;
+            cursor: pointer; text-align: center;
         }
         .btn-google { background: var(--primary-blue); color: white; border: none; }
         .btn-yandex { background: #f33e3e; color: white; border: none; }
@@ -160,7 +161,7 @@
                     "Hayotimizning eng go'zal damlarini siz azizlar bilan birga baham ko'rishdan mamnunmiz."
                 </div>
 
-                <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Komil+va+...+(To'y+marosimi)&dates=20261227T130000Z/20261227T180000Z&details=Sizni+to'yimizda+kutib+qolamiz!&location=Ideal+SS+Restorani" target="_blank" class="btn btn-calendar" id="cal-btn" style="margin-bottom: 30px;">KALENDARGA SAQLASH</a>
+                <button class="btn btn-calendar" id="cal-btn" onclick="downloadICS()" style="margin-bottom: 30px; width: 85%;">KALENDARGA SAQLASH</button>
 
                 <div class="map-section">
                     <img src="restaurant_icon.png" class="restaurant-icon" data-aos="zoom-in">
@@ -250,6 +251,30 @@
             document.getElementById('btn-no').innerText = t.no;
             document.getElementById('send-btn').innerText = t.send;
             document.getElementById('footer-t').innerText = t.footer;
+        }
+
+        // ICS FAYLNI YUKLASH FUNKSIYASI
+        function downloadICS() {
+            const icsData = [
+                "BEGIN:VCALENDAR",
+                "VERSION:2.0",
+                "BEGIN:VEVENT",
+                "DTSTART:20261227T130000Z",
+                "DTEND:20261227T180000Z",
+                "SUMMARY:Komil & ... (To'y marosimi)",
+                "DESCRIPTION:Sizni to'yimizda kutib qolamiz!",
+                "LOCATION:Ideal SS Restorani",
+                "END:VEVENT",
+                "END:VCALENDAR"
+            ].join("\r\n");
+
+            const blob = new Blob([icsData], { type: "text/calendar;charset=utf-8" });
+            const link = document.createElement("a");
+            link.href = window.URL.createObjectURL(blob);
+            link.setAttribute("download", "wedding_event.ics");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
         function setStatus(val, el) {
